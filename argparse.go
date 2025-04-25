@@ -1,5 +1,5 @@
 // A very simple CMD line argument parser that allows for arguments to be
-// specified both from CLI args and TOML config files.
+// specified from both the CLI and a TOML config file.
 package sbargp
 
 import (

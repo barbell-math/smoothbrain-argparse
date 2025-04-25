@@ -8,7 +8,7 @@
 import "github.com/barbell-math/smoothbrain-argparse"
 ```
 
-A very simple CMD line argument parser that allows for arguments to be specified both from CLI args and TOML config files.
+A very simple CMD line argument parser that allows for arguments to be specified from both the CLI and a TOML config file.
 
 ## Index
 
