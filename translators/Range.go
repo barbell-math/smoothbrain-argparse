@@ -13,7 +13,7 @@ type (
 	// A translator that imposes a range on the supplied cmd line argument.
 	_range[
 		T Translator[U],
-		U constraints.Signed | constraints.Unsigned | constraints.Float,
+		U constraints.Integer | constraints.Float,
 	] struct {
 		min           U // Inclusive min
 		max           U // Exclusive max

@@ -1,4 +1,4 @@
-package sbargp
+package argparse
 
 import (
 	"fmt"
@@ -15,17 +15,17 @@ type (
 
 	// Defines which arguments are conditionally required as well as when they
 	// are required.
-	argConditionality[T any] struct {
+	ArgConditionality[T any] struct {
 		Requires []string
 		When     ArgConditional[T]
 	}
 
 	// The optional values that are associated with an argument.
-	argOpts[T translators.Translator[U], U any] struct {
+	opts[T translators.Translator[U], U any] struct {
 		// The type of argument. This value will affect how the parser expects
 		// values, so make sure it is the right value. See [ArgType] for
 		// descriptions of available types.
-		argType translators.ArgType
+		argType ArgType
 		// The short name to associate with the argument. These will usually
 		// follow a form similar to '-t'.
 		shortName byte
@@ -33,7 +33,7 @@ type (
 		required bool
 		// The list of arguments that must also be provided if this argument is
 		// provided. All arguments provided are expected to be long names.
-		conditionallyRequired []argConditionality[U]
+		conditionallyRequired []ArgConditionality[U]
 		// Sets the description that will be printed out on the help menu.
 		description string
 		// The default value that should be used if the argument is not supplied.
@@ -59,7 +59,7 @@ type (
 		shortFlag   byte
 		longFlag    string
 		description string
-		argType     translators.ArgType
+		argType     ArgType
 
 		present         bool
 		required        bool
@@ -86,117 +86,18 @@ func ArgEquals[T comparable](val T) ArgConditional[T] {
 	}
 }
 
-// Create a new argument conditionallity rule that defines which arguments are
-// conditionally required as well as when they are required.
-func NewArgConditionality[T any](
-	when ArgConditional[T],
-	requires ...string,
-) argConditionality[T] {
-	return argConditionality[T]{
-		When:     when,
-		Requires: requires,
-	}
-}
-
-// Returns a new argOpts struct initialized with the default values.
-func NewArgOpts[T translators.Translator[U], U any]() *argOpts[T, U] {
-	var tmpU U
-	var tmpT T
-	return &argOpts[T, U]{
-		argType:               translators.ValueArgType,
-		shortName:             byte(0),
-		required:              false,
-		conditionallyRequired: []argConditionality[U]{},
-		description:           "",
-		defaultVal:            tmpU,
-		defaultValProvided:    false,
-		translator:            tmpT,
-	}
-}
-
-// The short name to associate with the argument. These will usually
-// follow a form similar to '-t'.
-func (o *argOpts[T, U]) SetShortName(v byte) *argOpts[T, U] {
-	o.shortName = v
-	return o
-}
-
-// Defines if the argument is required or not.
-func (o *argOpts[T, U]) SetRequired(v bool) *argOpts[T, U] {
-	o.required = v
-	return o
-}
-
-// The list of arguments that must also be provided if this argument is
-// provided. All arguments provided are expected to be long names.
-func (o *argOpts[T, U]) SetConditionallyRequired(
-	v ...argConditionality[U],
-) *argOpts[T, U] {
-	o.conditionallyRequired = v
-	return o
-}
-
-// Sets the description that will be printed out on the help menu.
-func (o *argOpts[T, U]) SetDescription(v string) *argOpts[T, U] {
-	o.description = v
-	return o
-}
-
 // The default value that should be used if the argument is not supplied.
 // The default defaults to a zero-value initialized value.
-func (o *argOpts[T, U]) SetDefaultVal(v U) *argOpts[T, U] {
+func (o *opts[T, U]) SetDefaultVal(v U) *opts[T, U] {
 	o.defaultVal = v
 	o.defaultValProvided = true
 	return o
 }
 
-// The translator value to use when parsing the cmd line argument's
-// value. Most translators are stateless, but some have state and hence
-// must be able to have there value explicitly set.
-func (o *argOpts[T, U]) SetTranslator(v T) *argOpts[T, U] {
-	o.translator = v
-	return o
-}
-
-// The short name to associate with the argument. These will usually
-// follow a form similar to '-t'.
-func (o *argOpts[T, U]) GetShortName() byte {
-	return o.shortName
-}
-
-// Defines if the argument is required or not.
-func (o *argOpts[T, U]) GetRequired() bool {
-	return o.required
-}
-
-// The list of arguments that must also be provided if this argument is
-// provided. All arguments provided are expected to be long names.
-func (o *argOpts[T, U]) GetConditionallyRequired() []argConditionality[U] {
-	return o.conditionallyRequired
-}
-
-// Sets the description that will be printed out on the help menu.
-func (o *argOpts[T, U]) GetDescription() string {
-	return o.description
-}
-
-// The default value that should be used if the argument is not supplied.
-// The default defaults to a zero-value initialized value.
-func (o *argOpts[T, U]) GetDefaultVal() U {
-	return o.defaultVal
-}
-
-// The translator value to use when parsing the cmd line argument's
-// value. Most translators are stateless, but some have state and hence
-// must be able to have there value explicitly set.
-func (o *argOpts[T, U]) GetTranslator() T {
-	return o.translator
-}
-
 func newArg[T translators.Translator[U], U any](
 	val *U,
 	longName string,
-	opts *argOpts[T, U],
+	opts *opts[T, U],
 ) arg {
 	return arg{
 		setVal: func(a *arg, arg string) error {
@@ -212,7 +113,7 @@ func newArg[T translators.Translator[U], U any](
 			*val = opts.defaultVal
 		},
 		defaultValAsStr: func() (string, bool) {
-			if opts.argType != translators.FlagArgType && !opts.required {
+			if opts.argType != FlagArgType && !opts.required {
 				return fmt.Sprint(opts.defaultVal), true
 			}
 			return "", false
@@ -240,7 +141,7 @@ func newArg[T translators.Translator[U], U any](
 			return rv
 		},
 
-		argType:     opts.translator.ArgType(),
+		argType:     opts.argType,
 		required:    opts.required,
 		description: opts.description,
 
