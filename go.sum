@@ -6,3 +6,5 @@ github.com/barbell-math/smoothbrain-errs v0.0.0-20250425053108-4f68fa9ea8f4 h1:i
 github.com/barbell-math/smoothbrain-errs v0.0.0-20250425053108-4f68fa9ea8f4/go.mod h1:xAQh5elTwqnV61FPUSPRf+7a1AOtem0vEbt3CAqnLpQ=
 github.com/barbell-math/smoothbrain-test v0.0.0-20250425205645-1b8de56049d2 h1:JY/yQt60Io+wmIB/o+hicyZ/tI/d9kyQDp6U2lJW8w0=
 github.com/barbell-math/smoothbrain-test v0.0.0-20250425205645-1b8de56049d2/go.mod h1:kav5jFv/ROflLA3qbsbvlqfirRZxqg9nTTQXcrLrUlE=
+golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 h1:R84qjqJb5nVJMxqWYb3np9L5ZsaDtB+a39EqjV0JSUM=
+golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0/go.mod h1:S9Xr4PYopiDyqSyp5NjCrhFrqg6A5zA2E/iPHPhqnS8=
