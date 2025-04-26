@@ -1,0 +1,22 @@
+# Un-comment the line below to override any StoreName argument provided on the 
+# CMD line
+# StoreName="WALL-E world"
+NumItems=3
+
+Vegies=["potato", "carrot", "chicken"]
+
+[Department]
+Name="produce"
+Specialty="fruit and vegetables"
+
+[Fruits.apple]
+Color="red"
+Yummy=true
+
+[Fruits.orange]
+Color="orange"
+Yummy=true
+
+[Fruits.banana]
+Color="yellow"
+Yummy=true

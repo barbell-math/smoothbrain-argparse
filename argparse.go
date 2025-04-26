@@ -51,13 +51,16 @@ var (
 // Takes a sequence of CMD line arguments and parses them. The supplied `conf`
 // value will be populated with any values.
 //
-// A `conf` argument will be added that
-// will accept a path to a TOML config file. This TOML config file will be
-// treated as another source of arguments, and the `conf` value will be
-// populated with the contents of that file.
+// A `conf` argument will be added that will accept a path to a TOML config
+// file. This TOML config file will be treated as another source of arguments,
+// and the `conf` value will be populated with the contents of that file. The
+// [burnt sushi] TOML parser is used internally, refer to it's documentation for
+// things like struct field tags.
 //
 // The arguments that are present in the TOML config file will take precedence
 // over all CMD line arguments.
+//
+// [burnt sushi]: https://github.com/BurntSushi/toml
 func Parse[T any](
 	conf *T,
 	cliArgs []string,
