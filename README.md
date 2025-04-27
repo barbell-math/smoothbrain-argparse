@@ -126,16 +126,6 @@ var (
 )
 ```
 
-<a name="LocalDatetime"></a>
-
-```go
-var (
-    LocalDatetime = time.FixedZone("datetime-local", localOffset)
-    LocalDate     = time.FixedZone("date-local", localOffset)
-    LocalTime     = time.FixedZone("time-local", localOffset)
-)
-```
-
 <a name="EnvVarNotSetErr"></a>
 
 ```go

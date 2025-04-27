@@ -7,23 +7,23 @@ import (
 
 var (
 	localOffset   = func() int { _, o := time.Now().Zone(); return o }()
-	LocalDatetime = time.FixedZone("datetime-local", localOffset)
-	LocalDate     = time.FixedZone("date-local", localOffset)
-	LocalTime     = time.FixedZone("time-local", localOffset)
+	localDatetime = time.FixedZone("datetime-local", localOffset)
+	localDate     = time.FixedZone("date-local", localOffset)
+	localTime     = time.FixedZone("time-local", localOffset)
 
 	dtTypes = []struct {
 		fmt  string
 		zone *time.Location
 	}{
 		{time.RFC3339Nano, time.Local},
-		{"2006-01-02T15:04:05.999999999", LocalDatetime},
-		{"2006-01-02", LocalDate},
-		{"15:04:05.999999999", LocalTime},
+		{"2006-01-02T15:04:05.999999999", localDatetime},
+		{"2006-01-02", localDate},
+		{"15:04:05.999999999", localTime},
 
 		// tomlNext
 		{"2006-01-02T15:04Z07:00", time.Local},
-		{"2006-01-02T15:04", LocalDatetime},
-		{"15:04", LocalTime},
+		{"2006-01-02T15:04", localDatetime},
+		{"15:04", localTime},
 	}
 
 	datetimeRepl = strings.NewReplacer(
