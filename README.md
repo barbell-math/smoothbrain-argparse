@@ -100,6 +100,7 @@ Parsed conf:
 
 - [Variables](<#variables>)
 - [func Parse\[T any\]\(conf \*T, cliArgs \[\]string, opts ParserOpts\[T\]\) error](<#Parse>)
+- [func Verbosity\[T constraints.Signed\]\(fs \*flag.FlagSet, val \*T, \_default T\)](<#Verbosity>)
 - [type AbsDir](<#AbsDir>)
   - [func \(a \*AbsDir\) UnmarshalText\(data \[\]byte\) error](<#AbsDir.UnmarshalText>)
 - [type AbsFile](<#AbsFile>)
@@ -111,7 +112,6 @@ Parsed conf:
 - [type File](<#File>)
   - [func \(f \*File\) UnmarshalText\(data \[\]byte\) error](<#File.UnmarshalText>)
 - [type FlagSetFunc](<#FlagSetFunc>)
-  - [func Flag\[T constraints.Integer | constraints.Float\]\(val \*T, \_default T, inc T\) FlagSetFunc](<#Flag>)
   - [func Float\[T constraints.Float\]\(val \*T, \_default T\) FlagSetFunc](<#Float>)
   - [func FromTextUnmarshaler\[T any, I interface \{
     \*T
@@ -146,11 +146,11 @@ var (
 )
 ```
 
-<a name="MissingLeadingZeros"></a>
+<a name="MissingLeadingZerosErr"></a>
 
 ```go
 var (
-    MissingLeadingZeros = errors.New(
+    MissingLeadingZerosErr = errors.New(
         "Leading zeros in date-time values cannot be left off",
     )
 )
@@ -168,6 +168,15 @@ Takes a sequence of CMD line arguments and parses them. The supplied \`conf\` va
 A \`conf\` argument will be added that will accept a path to a TOML config file. This TOML config file will be treated as another source of arguments, and the \`conf\` value will be populated with the contents of that file. The [burnt sushi](<https://github.com/BurntSushi/toml>) TOML parser is used internally, refer to it's documentation for things like struct field tags.
 
 The arguments that are present in the TOML config file will take precedence over all CMD line arguments.
+
+<a name="Verbosity"></a>
+## func [Verbosity](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L12-L16>)
+
+```go
+func Verbosity[T constraints.Signed](fs *flag.FlagSet, val *T, _default T)
+```
+
+Sets two flags: \-verbose and \-v. They both increment the same underlying value by one every time they are supplied. Both \-v and \-verbose can be supplied multiple times.
 
 <a name="AbsDir"></a>
 ## type [AbsDir](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L21>)
@@ -268,15 +277,6 @@ The type of function that [flag.Func](<https://pkg.go.dev/flag/#Func>) accepts
 type FlagSetFunc func(arg string) error
 ```
 
-<a name="Flag"></a>
-### func [Flag](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L116-L120>)
-
-```go
-func Flag[T constraints.Integer | constraints.Float](val *T, _default T, inc T) FlagSetFunc
-```
-
-Useful for setting a CMD line argument that will increment a counter by \`inc\` every time it is provided. Note that a key cannot be provided multiple times in TOML, so in a TOML file the key will just need to be set to the final value that the counter would have calculated.
-
 <a name="Float"></a>
 ### func [Float](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L94>)
 
@@ -287,7 +287,7 @@ func Float[T constraints.Float](val *T, _default T) FlagSetFunc
 Useful for parsing a specific kind of float from the CMD line since flag does not have a generic version yet. \(It only provides float64\)
 
 <a name="FromTextUnmarshaler"></a>
-### func [FromTextUnmarshaler](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L168-L174>)
+### func [FromTextUnmarshaler](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L154-L160>)
 
 ```go
 func FromTextUnmarshaler[T any, I interface {
@@ -310,7 +310,7 @@ func Int[T constraints.Signed](val *T, _default T, base int) FlagSetFunc
 Useful for parsing a specific kind of int from the CMD line since flag does not have a generic version yet. \(It only provides int\)
 
 <a name="Time"></a>
-### func [Time](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L132>)
+### func [Time](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L116>)
 
 ```go
 func Time(val *time.Time) FlagSetFunc
