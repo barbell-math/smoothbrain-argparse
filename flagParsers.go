@@ -2,8 +2,11 @@ package sbargp
 
 import (
 	"encoding"
+	"errors"
 	"strconv"
+	"time"
 
+	sberr "github.com/barbell-math/smoothbrain-errs"
 	"golang.org/x/exp/constraints"
 )
 
@@ -12,9 +15,17 @@ type (
 	flagSetFunc func(arg string) error
 )
 
+var (
+	MissingLeadingZeros = errors.New(
+		"Leading zeros in date-time values cannot be left off",
+	)
+)
+
 // Useful for parsing a specific kind of uint from the CMD line since flag does
 // not have a generic version yet. (It only provides uint)
-func Uint[T constraints.Unsigned](val *T, base int) flagSetFunc {
+func Uint[T constraints.Unsigned](val *T, _default T, base int) flagSetFunc {
+	*val = _default
+
 	var size int
 	switch any(val).(type) {
 	case *uint8:
@@ -46,7 +57,9 @@ func Uint[T constraints.Unsigned](val *T, base int) flagSetFunc {
 
 // Useful for parsing a specific kind of int from the CMD line since flag does
 // not have a generic version yet. (It only provides int)
-func Int[T constraints.Signed](val *T, base int) flagSetFunc {
+func Int[T constraints.Signed](val *T, _default T, base int) flagSetFunc {
+	*val = _default
+
 	var size int
 	switch any(val).(type) {
 	case *uint8:
@@ -78,7 +91,9 @@ func Int[T constraints.Signed](val *T, base int) flagSetFunc {
 
 // Useful for parsing a specific kind of float from the CMD line since flag does
 // not have a generic version yet. (It only provides float64)
-func Float[T constraints.Float](val *T) flagSetFunc {
+func Float[T constraints.Float](val *T, _default T) flagSetFunc {
+	*val = _default
+
 	var size int
 	switch any(val).(type) {
 	case *float32:
@@ -94,14 +109,71 @@ func Float[T constraints.Float](val *T) flagSetFunc {
 	}
 }
 
+// Useful for setting a CMD line argument that will increment a counter by `inc`
+// every time it is provided. Note that a key cannot be provided multiple times
+// in TOML, so in a TOML file the key will just need to be set to the final
+// value that the counter would have calculated.
+func Flag[T constraints.Integer | constraints.Float](
+	val *T,
+	_default T,
+	inc T,
+) flagSetFunc {
+	*val = _default
+	return func(arg string) error {
+		*val += inc
+		return nil
+	}
+}
+
+// Useful for parsing a time value from the CMD line. The format will one of the
+// [allowd date-time formats in TOML].
+//
+// [allowed date-time formats in TOML]: https://toml.io/en/v1.0.0#local-date-time
+func Time(val *time.Time) flagSetFunc {
+	return func(arg string) error {
+		arg = datetimeRepl.Replace(arg)
+		var err error
+		var t time.Time
+
+		for _, dt := range dtTypes {
+			t, err = time.ParseInLocation(dt.fmt, arg, dt.zone)
+			if err != nil {
+				continue
+			}
+
+			// If we are here then parsing the time passed, check for leading
+			// zeros...
+			if missing := missingLeadingZero(arg, dt.fmt); missing {
+				err = sberr.Wrap(MissingLeadingZeros, "%s", val.Format(dt.fmt))
+			}
+			break
+		}
+
+		// This is possibly the stupidest way possible to do this but this is
+		// what the TOML library does and we have to match that behavior so we
+		// are just going to look away
+		str, _ := t.MarshalText()
+		_ = val.UnmarshalText(str)
+
+		return err
+	}
+}
+
 // Useful when a type in the supplied config value is a custom type that
-// implements the [encoding.FromTextUnmarshaler] interface which the TOML parser
+// implements the [encoding.TextUnmarshaler] interface which the TOML parser
 // will use when parsing values.
 //
 // This is provided as a way to make sure the CMD line args can be parsed in the
 // same manner as the values in the TOML file.
-func FromTextUnmarshaler(val encoding.TextUnmarshaler) flagSetFunc {
+func FromTextUnmarshaler[T any, I interface {
+	*T
+	encoding.TextUnmarshaler
+}](
+	val *T,
+	_default T,
+) flagSetFunc {
+	*val = _default
 	return func(arg string) error {
-		return val.UnmarshalText([]byte(arg))
+		return I(val).UnmarshalText([]byte(arg))
 	}
 }
