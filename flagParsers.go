@@ -16,7 +16,7 @@ type (
 )
 
 var (
-	MissingLeadingZeros = errors.New(
+	MissingLeadingZerosErr = errors.New(
 		"Leading zeros in date-time values cannot be left off",
 	)
 )
@@ -109,22 +109,6 @@ func Float[T constraints.Float](val *T, _default T) FlagSetFunc {
 	}
 }
 
-// Useful for setting a CMD line argument that will increment a counter by `inc`
-// every time it is provided. Note that a key cannot be provided multiple times
-// in TOML, so in a TOML file the key will just need to be set to the final
-// value that the counter would have calculated.
-func Flag[T constraints.Integer | constraints.Float](
-	val *T,
-	_default T,
-	inc T,
-) FlagSetFunc {
-	*val = _default
-	return func(arg string) error {
-		*val += inc
-		return nil
-	}
-}
-
 // Useful for parsing a time value from the CMD line. The format will one of the
 // [allowd date-time formats in TOML].
 //
@@ -144,7 +128,9 @@ func Time(val *time.Time) FlagSetFunc {
 			// If we are here then parsing the time passed, check for leading
 			// zeros...
 			if missing := missingLeadingZero(arg, dt.fmt); missing {
-				err = sberr.Wrap(MissingLeadingZeros, "%s", val.Format(dt.fmt))
+				err = sberr.Wrap(
+					MissingLeadingZerosErr, "%s", val.Format(dt.fmt),
+				)
 			}
 			break
 		}
