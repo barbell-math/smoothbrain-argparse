@@ -100,6 +100,16 @@ Parsed conf:
 
 - [Variables](<#variables>)
 - [func Parse\[T any\]\(conf \*T, cliArgs \[\]string, opts ParserOpts\[T\]\) error](<#Parse>)
+- [type AbsDir](<#AbsDir>)
+  - [func \(a \*AbsDir\) UnmarshalText\(data \[\]byte\) error](<#AbsDir.UnmarshalText>)
+- [type AbsFile](<#AbsFile>)
+  - [func \(a \*AbsFile\) UnmarshalText\(data \[\]byte\) error](<#AbsFile.UnmarshalText>)
+- [type Dir](<#Dir>)
+  - [func \(d \*Dir\) UnmarshalText\(data \[\]byte\) error](<#Dir.UnmarshalText>)
+- [type EnvVar](<#EnvVar>)
+  - [func \(e \*EnvVar\) UnmarshalText\(data \[\]byte\) error](<#EnvVar.UnmarshalText>)
+- [type File](<#File>)
+  - [func \(f \*File\) UnmarshalText\(data \[\]byte\) error](<#File.UnmarshalText>)
 - [type ParserOpts](<#ParserOpts>)
 
 
@@ -116,6 +126,36 @@ var (
 )
 ```
 
+<a name="LocalDatetime"></a>
+
+```go
+var (
+    LocalDatetime = time.FixedZone("datetime-local", localOffset)
+    LocalDate     = time.FixedZone("date-local", localOffset)
+    LocalTime     = time.FixedZone("time-local", localOffset)
+)
+```
+
+<a name="EnvVarNotSetErr"></a>
+
+```go
+var (
+    EnvVarNotSetErr = errors.New(
+        "The supplied environment variable was not set",
+    )
+)
+```
+
+<a name="MissingLeadingZeros"></a>
+
+```go
+var (
+    MissingLeadingZeros = errors.New(
+        "Leading zeros in date-time values cannot be left off",
+    )
+)
+```
+
 <a name="Parse"></a>
 ## func [Parse](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/argparse.go#L64-L68>)
 
@@ -128,6 +168,96 @@ Takes a sequence of CMD line arguments and parses them. The supplied \`conf\` va
 A \`conf\` argument will be added that will accept a path to a TOML config file. This TOML config file will be treated as another source of arguments, and the \`conf\` value will be populated with the contents of that file. The [burnt sushi](<https://github.com/BurntSushi/toml>) TOML parser is used internally, refer to it's documentation for things like struct field tags.
 
 The arguments that are present in the TOML config file will take precedence over all CMD line arguments.
+
+<a name="AbsDir"></a>
+## type [AbsDir](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L21>)
+
+Can be used to represent an absolute path to a dir in a config. When unmarshaling the path will be made absolute if it is not already.
+
+```go
+type AbsDir string
+```
+
+<a name="AbsDir.UnmarshalText"></a>
+### func \(\*AbsDir\) [UnmarshalText](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L65>)
+
+```go
+func (a *AbsDir) UnmarshalText(data []byte) error
+```
+
+Checks that the supplied data is a valid path to a dir and if so resolves the absolute path and sets the underlying value absolute to the path.
+
+<a name="AbsFile"></a>
+## type [AbsFile](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L16>)
+
+Can be used to represent an absolute path to a file in a config. When unmarshaling the path will be made absolute if it is not already.
+
+```go
+type AbsFile string
+```
+
+<a name="AbsFile.UnmarshalText"></a>
+### func \(\*AbsFile\) [UnmarshalText](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L97>)
+
+```go
+func (a *AbsFile) UnmarshalText(data []byte) error
+```
+
+Checks that the supplied data is a valid path to a file and if so resolves the absolute path and sets the underlying value absolute to the path.
+
+<a name="Dir"></a>
+## type [Dir](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L18>)
+
+Can be used to represent a path to a dir in a config
+
+```go
+type Dir string
+```
+
+<a name="Dir.UnmarshalText"></a>
+### func \(\*Dir\) [UnmarshalText](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L51>)
+
+```go
+func (d *Dir) UnmarshalText(data []byte) error
+```
+
+Checks that the supplied data is a valid path to a dir and if so sets the underlying value to the path.
+
+<a name="EnvVar"></a>
+## type [EnvVar](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L25>)
+
+Can be used to represent a path to an environment variable in a config. The value of the config entry will be set to the value of the environment variable, if it exists. If it does not exist an error is returned.
+
+```go
+type EnvVar string
+```
+
+<a name="EnvVar.UnmarshalText"></a>
+### func \(\*EnvVar\) [UnmarshalText](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L36>)
+
+```go
+func (e *EnvVar) UnmarshalText(data []byte) error
+```
+
+Checks that the supplied data is a valid path to a file and if so sets the underlying value to the path.
+
+<a name="File"></a>
+## type [File](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L13>)
+
+Can be used to represent a path to a file in a config
+
+```go
+type File string
+```
+
+<a name="File.UnmarshalText"></a>
+### func \(\*File\) [UnmarshalText](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L83>)
+
+```go
+func (f *File) UnmarshalText(data []byte) error
+```
+
+Checks that the supplied data is a valid environment variable and if so sets the underlying value to the value of the environment variable.
 
 <a name="ParserOpts"></a>
 ## type [ParserOpts](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/argparse.go#L18-L41>)
