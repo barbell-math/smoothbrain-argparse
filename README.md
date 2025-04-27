@@ -110,6 +110,16 @@ Parsed conf:
   - [func \(e \*EnvVar\) UnmarshalText\(data \[\]byte\) error](<#EnvVar.UnmarshalText>)
 - [type File](<#File>)
   - [func \(f \*File\) UnmarshalText\(data \[\]byte\) error](<#File.UnmarshalText>)
+- [type FlagSetFunc](<#FlagSetFunc>)
+  - [func Flag\[T constraints.Integer | constraints.Float\]\(val \*T, \_default T, inc T\) FlagSetFunc](<#Flag>)
+  - [func Float\[T constraints.Float\]\(val \*T, \_default T\) FlagSetFunc](<#Float>)
+  - [func FromTextUnmarshaler\[T any, I interface \{
+    \*T
+    encoding.TextUnmarshaler
+\}\]\(val \*T, \_default T\) FlagSetFunc](<#FromTextUnmarshaler>)
+  - [func Int\[T constraints.Signed\]\(val \*T, \_default T, base int\) FlagSetFunc](<#Int>)
+  - [func Time\(val \*time.Time\) FlagSetFunc](<#Time>)
+  - [func Uint\[T constraints.Unsigned\]\(val \*T, \_default T, base int\) FlagSetFunc](<#Uint>)
 - [type ParserOpts](<#ParserOpts>)
 
 
@@ -248,6 +258,74 @@ func (f *File) UnmarshalText(data []byte) error
 ```
 
 Checks that the supplied data is a valid environment variable and if so sets the underlying value to the value of the environment variable.
+
+<a name="FlagSetFunc"></a>
+## type [FlagSetFunc](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L15>)
+
+The type of function that [flag.Func](<https://pkg.go.dev/flag/#Func>) accepts
+
+```go
+type FlagSetFunc func(arg string) error
+```
+
+<a name="Flag"></a>
+### func [Flag](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L116-L120>)
+
+```go
+func Flag[T constraints.Integer | constraints.Float](val *T, _default T, inc T) FlagSetFunc
+```
+
+Useful for setting a CMD line argument that will increment a counter by \`inc\` every time it is provided. Note that a key cannot be provided multiple times in TOML, so in a TOML file the key will just need to be set to the final value that the counter would have calculated.
+
+<a name="Float"></a>
+### func [Float](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L94>)
+
+```go
+func Float[T constraints.Float](val *T, _default T) FlagSetFunc
+```
+
+Useful for parsing a specific kind of float from the CMD line since flag does not have a generic version yet. \(It only provides float64\)
+
+<a name="FromTextUnmarshaler"></a>
+### func [FromTextUnmarshaler](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L168-L174>)
+
+```go
+func FromTextUnmarshaler[T any, I interface {
+    *T
+    encoding.TextUnmarshaler
+}](val *T, _default T) FlagSetFunc
+```
+
+Useful when a type in the supplied config value is a custom type that implements the [encoding.TextUnmarshaler](<https://pkg.go.dev/encoding/#TextUnmarshaler>) interface which the TOML parser will use when parsing values.
+
+This is provided as a way to make sure the CMD line args can be parsed in the same manner as the values in the TOML file.
+
+<a name="Int"></a>
+### func [Int](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L60>)
+
+```go
+func Int[T constraints.Signed](val *T, _default T, base int) FlagSetFunc
+```
+
+Useful for parsing a specific kind of int from the CMD line since flag does not have a generic version yet. \(It only provides int\)
+
+<a name="Time"></a>
+### func [Time](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L132>)
+
+```go
+func Time(val *time.Time) FlagSetFunc
+```
+
+Useful for parsing a time value from the CMD line. The format will one of the \[allowd date\-time formats in TOML\].
+
+<a name="Uint"></a>
+### func [Uint](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L26>)
+
+```go
+func Uint[T constraints.Unsigned](val *T, _default T, base int) FlagSetFunc
+```
+
+Useful for parsing a specific kind of uint from the CMD line since flag does not have a generic version yet. \(It only provides uint\)
 
 <a name="ParserOpts"></a>
 ## type [ParserOpts](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/argparse.go#L18-L41>)

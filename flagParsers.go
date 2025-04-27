@@ -12,7 +12,7 @@ import (
 
 type (
 	// The type of function that [flag.Func] accepts
-	flagSetFunc func(arg string) error
+	FlagSetFunc func(arg string) error
 )
 
 var (
@@ -23,7 +23,7 @@ var (
 
 // Useful for parsing a specific kind of uint from the CMD line since flag does
 // not have a generic version yet. (It only provides uint)
-func Uint[T constraints.Unsigned](val *T, _default T, base int) flagSetFunc {
+func Uint[T constraints.Unsigned](val *T, _default T, base int) FlagSetFunc {
 	*val = _default
 
 	var size int
@@ -57,7 +57,7 @@ func Uint[T constraints.Unsigned](val *T, _default T, base int) flagSetFunc {
 
 // Useful for parsing a specific kind of int from the CMD line since flag does
 // not have a generic version yet. (It only provides int)
-func Int[T constraints.Signed](val *T, _default T, base int) flagSetFunc {
+func Int[T constraints.Signed](val *T, _default T, base int) FlagSetFunc {
 	*val = _default
 
 	var size int
@@ -91,7 +91,7 @@ func Int[T constraints.Signed](val *T, _default T, base int) flagSetFunc {
 
 // Useful for parsing a specific kind of float from the CMD line since flag does
 // not have a generic version yet. (It only provides float64)
-func Float[T constraints.Float](val *T, _default T) flagSetFunc {
+func Float[T constraints.Float](val *T, _default T) FlagSetFunc {
 	*val = _default
 
 	var size int
@@ -117,7 +117,7 @@ func Flag[T constraints.Integer | constraints.Float](
 	val *T,
 	_default T,
 	inc T,
-) flagSetFunc {
+) FlagSetFunc {
 	*val = _default
 	return func(arg string) error {
 		*val += inc
@@ -129,7 +129,7 @@ func Flag[T constraints.Integer | constraints.Float](
 // [allowd date-time formats in TOML].
 //
 // [allowed date-time formats in TOML]: https://toml.io/en/v1.0.0#local-date-time
-func Time(val *time.Time) flagSetFunc {
+func Time(val *time.Time) FlagSetFunc {
 	return func(arg string) error {
 		arg = datetimeRepl.Replace(arg)
 		var err error
@@ -171,7 +171,7 @@ func FromTextUnmarshaler[T any, I interface {
 }](
 	val *T,
 	_default T,
-) flagSetFunc {
+) FlagSetFunc {
 	*val = _default
 	return func(arg string) error {
 		return I(val).UnmarshalText([]byte(arg))
