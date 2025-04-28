@@ -191,7 +191,7 @@ Sets three flags:
 - \<longArgStart\>.Verbose
 - v
 
-\<longArgDir\>.Dir and l will both set the directory to place any log files in. The flag parser will check that the dir exists. \<longArgStart\>.Verbose and v will be set by \[Verbose\].
+\<longArgDir\>.Dir and l will both set the directory to place any log files in. The flag parser will check that the dir exists. \<longArgStart\>.Verbose and v will be set by [Verbosity](<#Verbosity>).
 
 The longArgStart argument should be used to make sure the CMD line argument has the same name as the TOML key.
 

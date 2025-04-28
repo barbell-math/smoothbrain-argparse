@@ -41,12 +41,12 @@ func Verbosity[T constraints.Signed](
 	fs.Func(
 		fmt.Sprintf("%s.Verbose", longArgStart),
 		"An integer value that controls how much information to print to the console. Higher number=more information",
-		Int(val, _default, 1),
+		Int(val, _default, 10),
 	)
 	fs.Func(
 		"v",
 		"An integer value that controls how much information to print to the console. Higher number=more information",
-		Int(val, _default, 1),
+		Int(val, _default, 10),
 	)
 }
 
@@ -58,7 +58,7 @@ func Verbosity[T constraints.Signed](
 //
 // <longArgDir>.Dir and l will both set the directory to place any log files in.
 // The flag parser will check that the dir exists.
-// <longArgStart>.Verbose and v will be set by [Verbose].
+// <longArgStart>.Verbose and v will be set by [Verbosity].
 //
 // The longArgStart argument should be used to make sure the CMD line argument
 // has the same name as the TOML key.
