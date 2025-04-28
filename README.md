@@ -99,12 +99,15 @@ Parsed conf:
 ## Index
 
 - [Variables](<#variables>)
+- [func DB\(fs \*flag.FlagSet, dc \*DBConf, longArgStart string\)](<#DB>)
+- [func Logging\(fs \*flag.FlagSet, lc \*LoggingConf, longArgStart string\)](<#Logging>)
 - [func Parse\[T any\]\(conf \*T, cliArgs \[\]string, opts ParserOpts\[T\]\) error](<#Parse>)
 - [func Verbosity\[T constraints.Signed\]\(fs \*flag.FlagSet, val \*T, \_default T\)](<#Verbosity>)
 - [type AbsDir](<#AbsDir>)
   - [func \(a \*AbsDir\) UnmarshalText\(data \[\]byte\) error](<#AbsDir.UnmarshalText>)
 - [type AbsFile](<#AbsFile>)
   - [func \(a \*AbsFile\) UnmarshalText\(data \[\]byte\) error](<#AbsFile.UnmarshalText>)
+- [type DBConf](<#DBConf>)
 - [type Dir](<#Dir>)
   - [func \(d \*Dir\) UnmarshalText\(data \[\]byte\) error](<#Dir.UnmarshalText>)
 - [type EnvVar](<#EnvVar>)
@@ -120,6 +123,7 @@ Parsed conf:
   - [func Int\[T constraints.Signed\]\(val \*T, \_default T, base int\) FlagSetFunc](<#Int>)
   - [func Time\(val \*time.Time\) FlagSetFunc](<#Time>)
   - [func Uint\[T constraints.Unsigned\]\(val \*T, \_default T, base int\) FlagSetFunc](<#Uint>)
+- [type LoggingConf](<#LoggingConf>)
 - [type ParserOpts](<#ParserOpts>)
 
 
@@ -156,6 +160,32 @@ var (
 )
 ```
 
+<a name="DB"></a>
+## func [DB](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L72-L76>)
+
+```go
+func DB(fs *flag.FlagSet, dc *DBConf, longArgStart string)
+```
+
+Sets 5 flags that are intended to be used to access a database:
+
+- \<longArgStart\>.User \(no default set\)
+- \<longArgStart\>.PswdEnvVar \(no default set\)
+- \<longArgStart\>.NetLoc \(sets default to locahost\)
+- \<longArgStart\>.Port \(sets default to 5432\)
+- \<longArgStart\>.Name \(no default set\)
+
+The longArgStart argument should be used to make sure the CMD line argument has the same name as the TOML key.
+
+<a name="Logging"></a>
+## func [Logging](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L49>)
+
+```go
+func Logging(fs *flag.FlagSet, lc *LoggingConf, longArgStart string)
+```
+
+Sets two flags: \-\<longArgStart\>.LogDir and \-l. They both can be used to set the directory to place any log files in. The flag parser will check that the dir exists. The longArgStart argument should be used to make sure the CMD line argument has the same name as the TOML key.
+
 <a name="Parse"></a>
 ## func [Parse](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/argparse.go#L64-L68>)
 
@@ -170,7 +200,7 @@ A \`conf\` argument will be added that will accept a path to a TOML config file.
 The arguments that are present in the TOML config file will take precedence over all CMD line arguments.
 
 <a name="Verbosity"></a>
-## func [Verbosity](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L12-L16>)
+## func [Verbosity](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L28-L32>)
 
 ```go
 func Verbosity[T constraints.Signed](fs *flag.FlagSet, val *T, _default T)
@@ -213,6 +243,21 @@ func (a *AbsFile) UnmarshalText(data []byte) error
 ```
 
 Checks that the supplied data is a valid path to a file and if so resolves the absolute path and sets the underlying value absolute to the path.
+
+<a name="DBConf"></a>
+## type [DBConf](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L11-L17>)
+
+
+
+```go
+type DBConf struct {
+    User       string
+    PswdEnvVar string
+    NetLoc     string
+    Port       uint16
+    Name       string
+}
+```
 
 <a name="Dir"></a>
 ## type [Dir](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L18>)
@@ -326,6 +371,18 @@ func Uint[T constraints.Unsigned](val *T, _default T, base int) FlagSetFunc
 ```
 
 Useful for parsing a specific kind of uint from the CMD line since flag does not have a generic version yet. \(It only provides uint\)
+
+<a name="LoggingConf"></a>
+## type [LoggingConf](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L19-L22>)
+
+
+
+```go
+type LoggingConf struct {
+    Verbosity int
+    SaveTo    Dir
+}
+```
 
 <a name="ParserOpts"></a>
 ## type [ParserOpts](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/argparse.go#L18-L41>)
