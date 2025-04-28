@@ -26,9 +26,9 @@ type (
 //   - <longArgStart>.Verbose
 //   - v
 //
-// <longArgStart>.Verbose and v will both increment the same underlying value by
-// one every time they are supplied. Both -v and -verbose can be supplied
-// multiple times.
+// `<longArgStart>.Verbose` and `v` will both increment the same underlying
+// value by one every time they are supplied. Both `v` and
+// `<longArgStart>.Verbose` can be supplied multiple times.
 //
 // The longArgStart argument should be used to make sure the CMD line argument
 // has the same name as the TOML key. If verosity is a top level key then set
@@ -62,9 +62,9 @@ func Verbosity[T constraints.Signed](
 //   - <longArgStart>.Verbose
 //   - v
 //
-// <longArgDir>.SaveTo and l will both set the directory to place any log files
-// in. The flag parser will check that the dir exists.
-// <longArgStart>.Verbose and v will be set by [Verbosity].
+// `<longArgDir>.SaveTo` and `l` will both set the directory to place any log
+// files in. The flag parser will check that the dir exists.
+// `<longArgStart>.Verbose` and `v` will be set by [Verbosity].
 //
 // The longArgStart argument should be used to make sure the CMD line argument
 // has the same name as the TOML key.
@@ -87,7 +87,7 @@ func Logging(
 	)
 }
 
-// Sets 5 flags that are intended to be used to access a database:
+// Sets five flags that are intended to be used to access a database:
 //   - <longArgStart>.User
 //   - <longArgStart>.PswdEnvVar
 //   - <longArgStart>.NetLoc

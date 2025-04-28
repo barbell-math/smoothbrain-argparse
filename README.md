@@ -167,7 +167,7 @@ var (
 func DB(fs *flag.FlagSet, dc *DBConf, _defaults DBConf, longArgStart string)
 ```
 
-Sets 5 flags that are intended to be used to access a database:
+Sets five flags that are intended to be used to access a database:
 
 - \<longArgStart\>.User
 - \<longArgStart\>.PswdEnvVar
@@ -191,7 +191,7 @@ Sets four flags:
 - \<longArgStart\>.Verbose
 - v
 
-\<longArgDir\>.SaveTo and l will both set the directory to place any log files in. The flag parser will check that the dir exists. \<longArgStart\>.Verbose and v will be set by [Verbosity](<#Verbosity>).
+\`\<longArgDir\>.SaveTo\` and \`l\` will both set the directory to place any log files in. The flag parser will check that the dir exists. \`\<longArgStart\>.Verbose\` and \`v\` will be set by [Verbosity](<#Verbosity>).
 
 The longArgStart argument should be used to make sure the CMD line argument has the same name as the TOML key.
 
@@ -220,7 +220,7 @@ Sets two flags:
 - \<longArgStart\>.Verbose
 - v
 
-\<longArgStart\>.Verbose and v will both increment the same underlying value by one every time they are supplied. Both \-v and \-verbose can be supplied multiple times.
+\`\<longArgStart\>.Verbose\` and \`v\` will both increment the same underlying value by one every time they are supplied. Both \`v\` and \`\<longArgStart\>.Verbose\` can be supplied multiple times.
 
 The longArgStart argument should be used to make sure the CMD line argument has the same name as the TOML key. If verosity is a top level key then set longArgStart to an empty string.
 
