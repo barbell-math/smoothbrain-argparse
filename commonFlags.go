@@ -22,16 +22,24 @@ type (
 	}
 )
 
-// Sets two flags: -verbose and -v. They both increment the same underlying
-// value by one every time they are supplied. Both -v and -verbose can be
-// supplied multiple times.
+// Sets two flags:
+//   - <longArgStart>.Verbose
+//   - v
+//
+// <longArgStart>.Verbose and v will both increment the same underlying value by
+// one every time they are supplied. Both -v and -verbose can be supplied
+// multiple times.
+//
+// The longArgStart argument should be used to make sure the CMD line argument
+// has the same name as the TOML key.
 func Verbosity[T constraints.Signed](
 	fs *flag.FlagSet,
 	val *T,
 	_default T,
+	longArgStart string,
 ) {
 	fs.Func(
-		"verbose",
+		fmt.Sprintf("%s.Verbose", longArgStart),
 		"An integer value that controls how much information to print to the console. Higher number=more information",
 		Int(val, _default, 1),
 	)
@@ -42,14 +50,26 @@ func Verbosity[T constraints.Signed](
 	)
 }
 
-// Sets two flags: -<longArgStart>.LogDir and -l. They both can be used to set
-// the directory to place any log files in. The flag parser will check that the
-// dir exists. The longArgStart argument should be used to make sure the CMD
-// line argument has the same name as the TOML key.
-func Logging(fs *flag.FlagSet, lc *LoggingConf, longArgStart string) {
-	Verbosity(fs, &lc.Verbosity, 0)
+// Sets three flags:
+//   - <longArgStart>.Dir
+//   - l
+//   - <longArgStart>.Verbose
+//   - v
+//
+// <longArgDir>.Dir and l will both set the directory to place any log files in.
+// The flag parser will check that the dir exists.
+// <longArgStart>.Verbose and v will be set by [Verbose].
+//
+// The longArgStart argument should be used to make sure the CMD line argument
+// has the same name as the TOML key.
+func Logging(
+	fs *flag.FlagSet,
+	lc *LoggingConf,
+	longArgStart string,
+) {
+	Verbosity(fs, &lc.Verbosity, 0, longArgStart)
 	fs.Func(
-		fmt.Sprintf("%s.LogDir", longArgStart),
+		fmt.Sprintf("%s.Dir", longArgStart),
 		"The dir to place logs in",
 		FromTextUnmarshaler(&lc.SaveTo, ""),
 	)

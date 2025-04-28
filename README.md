@@ -102,7 +102,7 @@ Parsed conf:
 - [func DB\(fs \*flag.FlagSet, dc \*DBConf, longArgStart string\)](<#DB>)
 - [func Logging\(fs \*flag.FlagSet, lc \*LoggingConf, longArgStart string\)](<#Logging>)
 - [func Parse\[T any\]\(conf \*T, cliArgs \[\]string, opts ParserOpts\[T\]\) error](<#Parse>)
-- [func Verbosity\[T constraints.Signed\]\(fs \*flag.FlagSet, val \*T, \_default T\)](<#Verbosity>)
+- [func Verbosity\[T constraints.Signed\]\(fs \*flag.FlagSet, val \*T, \_default T, longArgStart string\)](<#Verbosity>)
 - [type AbsDir](<#AbsDir>)
   - [func \(a \*AbsDir\) UnmarshalText\(data \[\]byte\) error](<#AbsDir.UnmarshalText>)
 - [type AbsFile](<#AbsFile>)
@@ -161,7 +161,7 @@ var (
 ```
 
 <a name="DB"></a>
-## func [DB](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L72-L76>)
+## func [DB](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L92-L96>)
 
 ```go
 func DB(fs *flag.FlagSet, dc *DBConf, longArgStart string)
@@ -178,13 +178,22 @@ Sets 5 flags that are intended to be used to access a database:
 The longArgStart argument should be used to make sure the CMD line argument has the same name as the TOML key.
 
 <a name="Logging"></a>
-## func [Logging](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L49>)
+## func [Logging](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L65-L69>)
 
 ```go
 func Logging(fs *flag.FlagSet, lc *LoggingConf, longArgStart string)
 ```
 
-Sets two flags: \-\<longArgStart\>.LogDir and \-l. They both can be used to set the directory to place any log files in. The flag parser will check that the dir exists. The longArgStart argument should be used to make sure the CMD line argument has the same name as the TOML key.
+Sets three flags:
+
+- \<longArgStart\>.Dir
+- l
+- \<longArgStart\>.Verbose
+- v
+
+\<longArgDir\>.Dir and l will both set the directory to place any log files in. The flag parser will check that the dir exists. \<longArgStart\>.Verbose and v will be set by \[Verbose\].
+
+The longArgStart argument should be used to make sure the CMD line argument has the same name as the TOML key.
 
 <a name="Parse"></a>
 ## func [Parse](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/argparse.go#L64-L68>)
@@ -200,13 +209,20 @@ A \`conf\` argument will be added that will accept a path to a TOML config file.
 The arguments that are present in the TOML config file will take precedence over all CMD line arguments.
 
 <a name="Verbosity"></a>
-## func [Verbosity](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L28-L32>)
+## func [Verbosity](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L35-L40>)
 
 ```go
-func Verbosity[T constraints.Signed](fs *flag.FlagSet, val *T, _default T)
+func Verbosity[T constraints.Signed](fs *flag.FlagSet, val *T, _default T, longArgStart string)
 ```
 
-Sets two flags: \-verbose and \-v. They both increment the same underlying value by one every time they are supplied. Both \-v and \-verbose can be supplied multiple times.
+Sets two flags:
+
+- \<longArgStart\>.Verbose
+- v
+
+\<longArgStart\>.Verbose and v will both increment the same underlying value by one every time they are supplied. Both \-v and \-verbose can be supplied multiple times.
+
+The longArgStart argument should be used to make sure the CMD line argument has the same name as the TOML key.
 
 <a name="AbsDir"></a>
 ## type [AbsDir](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/unmarshalers.go#L21>)
