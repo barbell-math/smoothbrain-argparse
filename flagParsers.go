@@ -57,7 +57,7 @@ func Uint[T constraints.Unsigned](val *T, _default T, base int) FlagSetFunc {
 
 // Useful for parsing a specific kind of int from the CMD line since flag does
 // not have a generic version yet. (It only provides int)
-func Int[T constraints.Signed](val *T, _default T, base int) FlagSetFunc {
+func Int[T constraints.Signed](val *T, base int, _default T) FlagSetFunc {
 	*val = _default
 
 	var size int
@@ -113,7 +113,9 @@ func Float[T constraints.Float](val *T, _default T) FlagSetFunc {
 // [allowd date-time formats in TOML].
 //
 // [allowed date-time formats in TOML]: https://toml.io/en/v1.0.0#local-date-time
-func Time(val *time.Time) FlagSetFunc {
+func Time(val *time.Time, _default time.Time) FlagSetFunc {
+	*val = _default
+
 	return func(arg string) error {
 		arg = datetimeRepl.Replace(arg)
 		var err error

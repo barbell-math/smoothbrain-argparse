@@ -65,17 +65,17 @@ func testAllValueArgDefs(conf *allVals, fs *flag.FlagSet) error {
 	fs.Func("F32", "float32", Float(&conf.F32, 0))
 	fs.Func("F64", "float64", Float(&conf.F64, 0))
 
-	fs.Func("OffsetDT1", "time.Time", Time(&conf.OffsetDT1))
-	fs.Func("OffsetDT2", "time.Time", Time(&conf.OffsetDT2))
-	fs.Func("OffsetDT3", "time.Time", Time(&conf.OffsetDT3))
-	fs.Func("OffsetDT4", "time.Time", Time(&conf.OffsetDT4))
+	fs.Func("OffsetDT1", "time.Time", Time(&conf.OffsetDT1, time.Now()))
+	fs.Func("OffsetDT2", "time.Time", Time(&conf.OffsetDT2, time.Now()))
+	fs.Func("OffsetDT3", "time.Time", Time(&conf.OffsetDT3, time.Now()))
+	fs.Func("OffsetDT4", "time.Time", Time(&conf.OffsetDT4, time.Now()))
 
-	fs.Func("LocalDT1", "time.Time", Time(&conf.LocalDT1))
-	fs.Func("LocalDT2", "time.Time", Time(&conf.LocalDT2))
+	fs.Func("LocalDT1", "time.Time", Time(&conf.LocalDT1, time.Now()))
+	fs.Func("LocalDT2", "time.Time", Time(&conf.LocalDT2, time.Now()))
 
-	fs.Func("LocalDate", "time.Time", Time(&conf.LocalDate))
-	fs.Func("LocalTime1", "time.Time", Time(&conf.LocalTime1))
-	fs.Func("LocalTime2", "time.Time", Time(&conf.LocalTime2))
+	fs.Func("LocalDate", "time.Time", Time(&conf.LocalDate, time.Now()))
+	fs.Func("LocalTime1", "time.Time", Time(&conf.LocalTime1, time.Now()))
+	fs.Func("LocalTime2", "time.Time", Time(&conf.LocalTime2, time.Now()))
 
 	return nil
 }

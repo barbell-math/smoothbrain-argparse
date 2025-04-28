@@ -36,8 +36,8 @@ type (
 func Verbosity[T constraints.Signed](
 	fs *flag.FlagSet,
 	val *T,
-	_default T,
 	longArgStart string,
+	_default T,
 ) {
 	startStr := ""
 	if len(longArgStart) > 0 {
@@ -47,12 +47,12 @@ func Verbosity[T constraints.Signed](
 	fs.Func(
 		fmt.Sprintf("%sVerbose", startStr),
 		"An integer value that controls how much information to print to the console. Higher number=more information",
-		Int(val, _default, 10),
+		Int(val, 10, _default),
 	)
 	fs.Func(
 		"v",
 		"An integer value that controls how much information to print to the console. Higher number=more information",
-		Int(val, _default, 10),
+		Int(val, 10, _default),
 	)
 }
 
@@ -71,10 +71,10 @@ func Verbosity[T constraints.Signed](
 func Logging(
 	fs *flag.FlagSet,
 	lc *LoggingConf,
-	_defaults LoggingConf,
 	longArgStart string,
+	_defaults LoggingConf,
 ) {
-	Verbosity(fs, &lc.Verbosity, _defaults.Verbosity, longArgStart)
+	Verbosity(fs, &lc.Verbosity, longArgStart, _defaults.Verbosity)
 	fs.Func(
 		fmt.Sprintf("%s.SaveTo", longArgStart),
 		"The dir to place logs in",
@@ -99,8 +99,8 @@ func Logging(
 func DB(
 	fs *flag.FlagSet,
 	dc *DBConf,
-	_defaults DBConf,
 	longArgStart string,
+	_defaults DBConf,
 ) {
 	fs.StringVar(
 		&dc.User,

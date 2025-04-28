@@ -99,10 +99,10 @@ Parsed conf:
 ## Index
 
 - [Variables](<#variables>)
-- [func DB\(fs \*flag.FlagSet, dc \*DBConf, \_defaults DBConf, longArgStart string\)](<#DB>)
-- [func Logging\(fs \*flag.FlagSet, lc \*LoggingConf, \_defaults LoggingConf, longArgStart string\)](<#Logging>)
+- [func DB\(fs \*flag.FlagSet, dc \*DBConf, longArgStart string, \_defaults DBConf\)](<#DB>)
+- [func Logging\(fs \*flag.FlagSet, lc \*LoggingConf, longArgStart string, \_defaults LoggingConf\)](<#Logging>)
 - [func Parse\[T any\]\(conf \*T, cliArgs \[\]string, opts ParserOpts\[T\]\) error](<#Parse>)
-- [func Verbosity\[T constraints.Signed\]\(fs \*flag.FlagSet, val \*T, \_default T, longArgStart string\)](<#Verbosity>)
+- [func Verbosity\[T constraints.Signed\]\(fs \*flag.FlagSet, val \*T, longArgStart string, \_default T\)](<#Verbosity>)
 - [type AbsDir](<#AbsDir>)
   - [func \(a \*AbsDir\) UnmarshalText\(data \[\]byte\) error](<#AbsDir.UnmarshalText>)
 - [type AbsFile](<#AbsFile>)
@@ -120,8 +120,8 @@ Parsed conf:
     \*T
     encoding.TextUnmarshaler
 \}\]\(val \*T, \_default T\) FlagSetFunc](<#FromTextUnmarshaler>)
-  - [func Int\[T constraints.Signed\]\(val \*T, \_default T, base int\) FlagSetFunc](<#Int>)
-  - [func Time\(val \*time.Time\) FlagSetFunc](<#Time>)
+  - [func Int\[T constraints.Signed\]\(val \*T, base int, \_default T\) FlagSetFunc](<#Int>)
+  - [func Time\(val \*time.Time, \_default time.Time\) FlagSetFunc](<#Time>)
   - [func Uint\[T constraints.Unsigned\]\(val \*T, \_default T, base int\) FlagSetFunc](<#Uint>)
 - [type LoggingConf](<#LoggingConf>)
 - [type ParserOpts](<#ParserOpts>)
@@ -164,7 +164,7 @@ var (
 ## func [DB](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L99-L104>)
 
 ```go
-func DB(fs *flag.FlagSet, dc *DBConf, _defaults DBConf, longArgStart string)
+func DB(fs *flag.FlagSet, dc *DBConf, longArgStart string, _defaults DBConf)
 ```
 
 Sets five flags that are intended to be used to access a database:
@@ -181,7 +181,7 @@ The longArgStart argument should be used to make sure the CMD line argument has 
 ## func [Logging](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L71-L76>)
 
 ```go
-func Logging(fs *flag.FlagSet, lc *LoggingConf, _defaults LoggingConf, longArgStart string)
+func Logging(fs *flag.FlagSet, lc *LoggingConf, longArgStart string, _defaults LoggingConf)
 ```
 
 Sets four flags:
@@ -212,7 +212,7 @@ The arguments that are present in the TOML config file will take precedence over
 ## func [Verbosity](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L36-L41>)
 
 ```go
-func Verbosity[T constraints.Signed](fs *flag.FlagSet, val *T, _default T, longArgStart string)
+func Verbosity[T constraints.Signed](fs *flag.FlagSet, val *T, longArgStart string, _default T)
 ```
 
 Sets two flags:
@@ -348,7 +348,7 @@ func Float[T constraints.Float](val *T, _default T) FlagSetFunc
 Useful for parsing a specific kind of float from the CMD line since flag does not have a generic version yet. \(It only provides float64\)
 
 <a name="FromTextUnmarshaler"></a>
-### func [FromTextUnmarshaler](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L154-L160>)
+### func [FromTextUnmarshaler](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L156-L162>)
 
 ```go
 func FromTextUnmarshaler[T any, I interface {
@@ -365,7 +365,7 @@ This is provided as a way to make sure the CMD line args can be parsed in the sa
 ### func [Int](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L60>)
 
 ```go
-func Int[T constraints.Signed](val *T, _default T, base int) FlagSetFunc
+func Int[T constraints.Signed](val *T, base int, _default T) FlagSetFunc
 ```
 
 Useful for parsing a specific kind of int from the CMD line since flag does not have a generic version yet. \(It only provides int\)
@@ -374,7 +374,7 @@ Useful for parsing a specific kind of int from the CMD line since flag does not 
 ### func [Time](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/flagParsers.go#L116>)
 
 ```go
-func Time(val *time.Time) FlagSetFunc
+func Time(val *time.Time, _default time.Time) FlagSetFunc
 ```
 
 Useful for parsing a time value from the CMD line. The format will one of the \[allowd date\-time formats in TOML\].
