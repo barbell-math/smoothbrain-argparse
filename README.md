@@ -271,7 +271,7 @@ Checks that the supplied data is a valid path to a file and if so resolves the a
 ```go
 type DBConf struct {
     User       string
-    PswdEnvVar string
+    PswdEnvVar EnvVar
     Host       string
     Port       uint16
     Name       string
