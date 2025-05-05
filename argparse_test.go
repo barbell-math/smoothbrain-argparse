@@ -95,7 +95,7 @@ func TestHelp(t *testing.T) {
 
 	errStr := strings.ReplaceAll(err.Error(), "\t", "    ")
 	expStr := `flag: help requested
-  |- Usage of testing:
+    → Usage of testing:
   -conf string
         Path to toml config file
   -one int
@@ -133,7 +133,7 @@ func TestInvalidArgument(t *testing.T) {
 
 	errStr := strings.ReplaceAll(err.Error(), "\t", "    ")
 	expStr := `flag provided but not defined: -asdf
-  |- Usage of testing:
+    → Usage of testing:
   -conf string
         Path to toml config file
   -one int
@@ -156,8 +156,8 @@ func TestExtraArgsSuppliedAccordingToFlag(t *testing.T) {
 
 	errStr := strings.ReplaceAll(err.Error(), "\t", "    ")
 	expStr := `Invalid argument
-  |- asdf
-  |- Usage of testing:
+    → asdf
+    → Usage of testing:
   -conf string
         Path to toml config file
   -one int
@@ -180,8 +180,8 @@ func TestConfFileDoesNotExist(t *testing.T) {
 
 	errStr := strings.ReplaceAll(err.Error(), "\t", "    ")
 	expStr := `Invalid conf file
-  |- stat asdf: no such file or directory
-  |- Usage of testing:
+    → stat asdf: no such file or directory
+    → Usage of testing:
   -conf string
         Path to toml config file
   -one int
@@ -205,8 +205,8 @@ func TestConfFileDecodeError(t *testing.T) {
 
 	errStr := strings.ReplaceAll(err.Error(), "\t", "    ")
 	expStr := `Invalid conf file
-  |- toml: line 1: expected '.' or '=', but got '\n' instead
-  |- Usage of testing:
+    → toml: line 1: expected '.' or '=', but got '\n' instead
+    → Usage of testing:
   -conf string
         Path to toml config file
   -one int
@@ -231,8 +231,8 @@ func TestExtraArgsSuppliedAccordingToTomlKeys(t *testing.T) {
 	errStr := strings.ReplaceAll(err.Error(), "\t", "    ")
 	expStr := `Invalid conf file
 Invalid values in conf file
-  |- Invalid Keys: [asdf]
-  |- Usage of testing:
+    → Invalid Keys: [asdf]
+    → Usage of testing:
   -conf string
         Path to toml config file
   -one int
@@ -260,8 +260,8 @@ func TestMissingRequiredArgCMDLineOnly(t *testing.T) {
 
 	errStr := strings.ReplaceAll(err.Error(), "\t", "    ")
 	expStr := `Missing required args
-  |- Still need: [three]
-  |- Usage of testing:
+    → Still need: [three]
+    → Usage of testing:
   -conf string
         Path to toml config file
   -one int
@@ -289,8 +289,8 @@ func TestMissingRequiredArgTOMLOnly(t *testing.T) {
 
 	errStr := strings.ReplaceAll(err.Error(), "\t", "    ")
 	expStr := `Missing required args
-  |- Still need: [three]
-  |- Usage of testing:
+    → Still need: [three]
+    → Usage of testing:
   -conf string
         Path to toml config file
   -one int
@@ -318,8 +318,8 @@ func TestMissingRequiredArgMixedTOMLAndCMDLine(t *testing.T) {
 
 	errStr := strings.ReplaceAll(err.Error(), "\t", "    ")
 	expStr := `Missing required args
-  |- Still need: [three]
-  |- Usage of testing:
+    → Still need: [three]
+    → Usage of testing:
   -conf string
         Path to toml config file
   -one int
