@@ -161,7 +161,7 @@ var (
 ```
 
 <a name="DB"></a>
-## func [DB](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L99-L104>)
+## func [DB](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L107-L112>)
 
 ```go
 func DB(fs *flag.FlagSet, dc *DBConf, longArgStart string, _defaults DBConf)
@@ -178,16 +178,17 @@ Sets five flags that are intended to be used to access a database:
 The longArgStart argument should be used to make sure the CMD line argument has the same name as the TOML key.
 
 <a name="Logging"></a>
-## func [Logging](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L71-L76>)
+## func [Logging](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L73-L78>)
 
 ```go
 func Logging(fs *flag.FlagSet, lc *LoggingConf, longArgStart string, _defaults LoggingConf)
 ```
 
-Sets four flags:
+Sets five flags:
 
 - \<longArgStart\>.SaveTo
 - l
+- \<longArgStart\>.Name
 - \<longArgStart\>.Verbose
 - v
 
@@ -209,7 +210,7 @@ A \`conf\` argument will be added that will accept a path to a TOML config file.
 The arguments that are present in the TOML config file will take precedence over all CMD line arguments.
 
 <a name="Verbosity"></a>
-## func [Verbosity](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L36-L41>)
+## func [Verbosity](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L37-L42>)
 
 ```go
 func Verbosity[T constraints.Signed](fs *flag.FlagSet, val *T, longArgStart string, _default T)
@@ -389,7 +390,7 @@ func Uint[T constraints.Unsigned](val *T, _default T, base int) FlagSetFunc
 Useful for parsing a specific kind of uint from the CMD line since flag does not have a generic version yet. \(It only provides uint\)
 
 <a name="LoggingConf"></a>
-## type [LoggingConf](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L19-L22>)
+## type [LoggingConf](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L19-L23>)
 
 
 
@@ -397,6 +398,7 @@ Useful for parsing a specific kind of uint from the CMD line since flag does not
 type LoggingConf struct {
     Verbosity int
     SaveTo    Dir
+    Name      string
 }
 ```
 

@@ -19,6 +19,7 @@ type (
 	LoggingConf struct {
 		Verbosity int
 		SaveTo    Dir
+		Name      string
 	}
 )
 
@@ -56,9 +57,10 @@ func Verbosity[T constraints.Signed](
 	)
 }
 
-// Sets four flags:
+// Sets five flags:
 //   - <longArgStart>.SaveTo
 //   - l
+//   - <longArgStart>.Name
 //   - <longArgStart>.Verbose
 //   - v
 //
@@ -84,6 +86,12 @@ func Logging(
 		"l",
 		"The dir to place logs in",
 		FromTextUnmarshaler(&lc.SaveTo, _defaults.SaveTo),
+	)
+	fs.StringVar(
+		&lc.Name,
+		fmt.Sprintf("%s.Name", longArgStart),
+		"",
+		"The name of the log files to create",
 	)
 }
 
