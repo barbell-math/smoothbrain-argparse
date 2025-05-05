@@ -11,7 +11,7 @@ type (
 	DBConf struct {
 		User       string
 		PswdEnvVar string
-		NetLoc     string
+		Host       string
 		Port       uint16
 		Name       string
 	}
@@ -114,7 +114,7 @@ func Logging(
 // Sets five flags that are intended to be used to access a database:
 //   - <longArgStart>.User
 //   - <longArgStart>.PswdEnvVar
-//   - <longArgStart>.NetLoc
+//   - <longArgStart>.Host
 //   - <longArgStart>.Port
 //   - <longArgStart>.Name
 //
@@ -137,8 +137,8 @@ func DB(
 		"The environment variable to get the database password from",
 	)
 	fs.StringVar(
-		&dc.NetLoc,
-		fmt.Sprintf("%s.NetLoc", longArgStart), _defaults.NetLoc,
+		&dc.Host,
+		fmt.Sprintf("%s.Host", longArgStart), _defaults.Host,
 		"The network path used to access the database. Can be an address or URL",
 	)
 	fs.Func(

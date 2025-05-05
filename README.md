@@ -171,7 +171,7 @@ Sets five flags that are intended to be used to access a database:
 
 - \<longArgStart\>.User
 - \<longArgStart\>.PswdEnvVar
-- \<longArgStart\>.NetLoc
+- \<longArgStart\>.Host
 - \<longArgStart\>.Port
 - \<longArgStart\>.Name
 
@@ -272,7 +272,7 @@ Checks that the supplied data is a valid path to a file and if so resolves the a
 type DBConf struct {
     User       string
     PswdEnvVar string
-    NetLoc     string
+    Host       string
     Port       uint16
     Name       string
 }
