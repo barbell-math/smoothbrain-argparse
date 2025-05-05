@@ -10,7 +10,7 @@ import (
 type (
 	DBConf struct {
 		User       string
-		PswdEnvVar string
+		PswdEnvVar EnvVar
 		Host       string
 		Port       uint16
 		Name       string
@@ -131,10 +131,10 @@ func DB(
 		fmt.Sprintf("%s.User", longArgStart), _defaults.User,
 		"The user to access the database with",
 	)
-	fs.StringVar(
-		&dc.PswdEnvVar,
-		fmt.Sprintf("%s.PswdEnvVar", longArgStart), _defaults.PswdEnvVar,
+	fs.Func(
+		fmt.Sprintf("%s.PswdEnvVar", longArgStart),
 		"The environment variable to get the database password from",
+		FromTextUnmarshaler(&dc.PswdEnvVar, _defaults.PswdEnvVar),
 	)
 	fs.StringVar(
 		&dc.Host,
