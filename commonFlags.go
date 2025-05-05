@@ -17,9 +17,11 @@ type (
 	}
 
 	LoggingConf struct {
-		Verbosity int
-		SaveTo    Dir
-		Name      string
+		Verbosity       int
+		SaveTo          Dir
+		Name            string
+		MaxNumLogs      int
+		MaxLogSizeBytes int
 	}
 )
 
@@ -61,6 +63,8 @@ func Verbosity[T constraints.Signed](
 //   - <longArgStart>.SaveTo
 //   - l
 //   - <longArgStart>.Name
+//   - <longArgStart>.MaxNumLogs
+//   - <longArgStart>.MaxLogSizeBytes
 //   - <longArgStart>.Verbose
 //   - v
 //
@@ -92,6 +96,18 @@ func Logging(
 		fmt.Sprintf("%s.Name", longArgStart),
 		_defaults.Name,
 		"The name of the log files to create",
+	)
+	fs.IntVar(
+		&lc.MaxNumLogs,
+		fmt.Sprintf("%s.MaxNumLogs", longArgStart),
+		_defaults.MaxNumLogs,
+		"The maximum number of log files that should be created",
+	)
+	fs.IntVar(
+		&lc.MaxLogSizeBytes,
+		fmt.Sprintf("%s.MaxLogSizeBytes", longArgStart),
+		_defaults.MaxLogSizeBytes,
+		"The maximum size of log files that will be created",
 	)
 }
 

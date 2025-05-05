@@ -161,7 +161,7 @@ var (
 ```
 
 <a name="DB"></a>
-## func [DB](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L107-L112>)
+## func [DB](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L123-L128>)
 
 ```go
 func DB(fs *flag.FlagSet, dc *DBConf, longArgStart string, _defaults DBConf)
@@ -178,7 +178,7 @@ Sets five flags that are intended to be used to access a database:
 The longArgStart argument should be used to make sure the CMD line argument has the same name as the TOML key.
 
 <a name="Logging"></a>
-## func [Logging](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L73-L78>)
+## func [Logging](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L77-L82>)
 
 ```go
 func Logging(fs *flag.FlagSet, lc *LoggingConf, longArgStart string, _defaults LoggingConf)
@@ -189,6 +189,8 @@ Sets five flags:
 - \<longArgStart\>.SaveTo
 - l
 - \<longArgStart\>.Name
+- \<longArgStart\>.MaxNumLogs
+- \<longArgStart\>.MaxLogSizeBytes
 - \<longArgStart\>.Verbose
 - v
 
@@ -210,7 +212,7 @@ A \`conf\` argument will be added that will accept a path to a TOML config file.
 The arguments that are present in the TOML config file will take precedence over all CMD line arguments.
 
 <a name="Verbosity"></a>
-## func [Verbosity](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L37-L42>)
+## func [Verbosity](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L39-L44>)
 
 ```go
 func Verbosity[T constraints.Signed](fs *flag.FlagSet, val *T, longArgStart string, _default T)
@@ -390,15 +392,17 @@ func Uint[T constraints.Unsigned](val *T, _default T, base int) FlagSetFunc
 Useful for parsing a specific kind of uint from the CMD line since flag does not have a generic version yet. \(It only provides uint\)
 
 <a name="LoggingConf"></a>
-## type [LoggingConf](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L19-L23>)
+## type [LoggingConf](<https://github.com/barbell-math/smoothbrain-argparse/blob/main/commonFlags.go#L19-L25>)
 
 
 
 ```go
 type LoggingConf struct {
-    Verbosity int
-    SaveTo    Dir
-    Name      string
+    Verbosity       int
+    SaveTo          Dir
+    Name            string
+    MaxNumLogs      int
+    MaxLogSizeBytes int
 }
 ```
 
