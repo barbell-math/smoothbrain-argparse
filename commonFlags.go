@@ -90,7 +90,7 @@ func Logging(
 	fs.StringVar(
 		&lc.Name,
 		fmt.Sprintf("%s.Name", longArgStart),
-		"",
+		_defaults.Name,
 		"The name of the log files to create",
 	)
 }
