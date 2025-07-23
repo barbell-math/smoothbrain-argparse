@@ -4,8 +4,8 @@ go 1.24.1
 
 require (
 	github.com/BurntSushi/toml v1.5.0
-	github.com/barbell-math/smoothbrain-bs v0.0.0-20250504072551-feab7facc14e
-	github.com/barbell-math/smoothbrain-errs v0.0.0-20250505014541-5cf84614edb6
-	github.com/barbell-math/smoothbrain-test v0.0.0-20250505014501-62d578f863d7
-	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0
+	github.com/barbell-math/smoothbrain-bs v0.0.0-20250723065839-bed764397213
+	github.com/barbell-math/smoothbrain-errs v0.0.0-20250723070428-fd86bcc11533
+	github.com/barbell-math/smoothbrain-test v0.0.0-20250723070109-ff7cc4fb999d
+	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792
 )
